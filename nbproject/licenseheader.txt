@@ -1,0 +1,9 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>${licensePrefix}**** Classwork for CIS2168 at Temple University ****
+${licensePrefix}File created and owned by William Power.
+${licensePrefix}No license.  It is against the academic honesty policy to
+${licensePrefix}copy the code in this file, or any file in the repo.
+<#if licenseLast??>
+${licenseLast}
+</#if>

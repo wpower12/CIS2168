@@ -143,7 +143,7 @@ public class Intcoll4 {
      */
     public boolean equals(Intcoll4 obj) {
         ListNode curr = c;
-        boolean match = (howmany == obj.get_howmany());
+        boolean match = (obj != this) && (howmany == obj.get_howmany());
         while (curr != null && match) {
             if (!obj.belongs(curr.info)) {
                 match = false;

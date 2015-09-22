@@ -46,7 +46,7 @@ public class Intcoll5 {
      * Return: void
      */
     public void copy(Intcoll5 obj) {
-
+        
     } 
 
     /* Checks if the value is in the collection
@@ -87,6 +87,7 @@ public class Intcoll5 {
      */
     public void print() {
         ListIterator iter = c.listIterator();
+        
         System.out.print("(");
         while( iter.hasNext() ){
             System.out.print( " "+iter.next() );

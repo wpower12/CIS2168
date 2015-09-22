@@ -107,7 +107,7 @@ public class Intcoll4 {
         }
         if (curr != null) {
             if (prev == null) {
-                c = null;
+                c = curr.link;
             } else {
                 prev.link = curr.link;
             }

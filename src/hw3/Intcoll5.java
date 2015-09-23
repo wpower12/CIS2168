@@ -11,14 +11,14 @@ import java.util.ListIterator;
 
 /**
  * Intcoll5 - Collection now uses an actual Java api collection as its core.
- *  
- *  - c now points to a object of LinkedList<Integer> type.
- *  - No longer have a howmany field.  
- *  - Need to use just the API of the LinkedList class to implement our class
- * 
+ *
+ * - c now points to a object of LinkedList<Integer> type. - No longer have a
+ * howmany field. - Need to use just the API of the LinkedList class to
+ * implement our class
+ *
  *  **Read the IteratorDemo, LinkedListsDemo in classexamples to see how the
- *    methods in the class work. **
- * 
+ * methods in the class work. **
+ *
  * @author wpower
  */
 public class Intcoll5 {
@@ -46,8 +46,13 @@ public class Intcoll5 {
      * Return: void
      */
     public void copy(Intcoll5 obj) {
-        
-    } 
+        this.c.clear();
+        ListIterator iter = obj.c.listIterator();
+        while (iter.hasNext()) {
+            int n = (int) iter.next();
+            c.add(n);
+        }
+    }
 
     /* Checks if the value is in the collection
      * Input: int i, value to search for
@@ -87,10 +92,10 @@ public class Intcoll5 {
      */
     public void print() {
         ListIterator iter = c.listIterator();
-        
+
         System.out.print("(");
-        while( iter.hasNext() ){
-            System.out.print( " "+iter.next() );
+        while (iter.hasNext()) {
+            System.out.print(" " + iter.next());
         }
         System.out.print(" )");
     }
@@ -103,25 +108,24 @@ public class Intcoll5 {
         return (this != obj) && c.equals(obj.c);
     }
 
-    public static void main( String[] args ){
+    public static void main(String[] args) {
         Intcoll5 A = new Intcoll5();
         A.insert(1);
         A.insert(15);
         A.insert(10);
-        
+
         Intcoll5 B = new Intcoll5();
         B.insert(2);
         B.insert(25);
         B.insert(10);
-        
+
         System.out.println("A:");
         A.print();
-        
+
         System.out.println("\nB:");
         B.print();
-        
-        System.out.println( "\nA == B : "+A.equals(B));
-        
+
+        System.out.println("\nA == B : " + A.equals(B));
+
     }
 }
-

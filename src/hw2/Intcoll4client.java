@@ -18,9 +18,9 @@ public class Intcoll4client {
         C.insert(20000);
         C.print();
         System.out.println("C has this many "+C.get_howmany());
-        C.omit(2);
-        C.omit(1);
         C.omit(20000);
+        C.omit(1);
+        C.omit(2);
         C.print();
         
         System.out.println("C has this many "+C.get_howmany());

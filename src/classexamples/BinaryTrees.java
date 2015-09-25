@@ -70,7 +70,7 @@ public class BinaryTrees {
      Insert and delete are also on the order of log(n), provided the 
      implementation maintains the minimum depth criteria.  This is the first
      data structure weve seen that supports all three main collection methods.
-     Insert, Search, Delete are all linear time.
+     Insert, Search, Delete are all linearithmic time.
     
      Details of their implementation are found below, above their actual methods.
      */
@@ -116,7 +116,7 @@ public class BinaryTrees {
         /* Insert
          Naeiieve Method:
          - First do a search.  
-         - When you get to a node with a null, youve reache where the element goes.  
+         - When you get to a node with a null, youve reached where the element goes.  
          Add a node.
          */
         public void insert(int i) {
@@ -126,6 +126,7 @@ public class BinaryTrees {
                 root = new BinaryTree(i);
             }
         }
+        
         /* Delete
          First we search, then there are a few cases depending on where we find
             the element to delete.
@@ -138,6 +139,11 @@ public class BinaryTrees {
          :   If the search yields an internal node with one child, its simple
          to reassign that child as the child on the correct side of the elements
          parent.  
+        
+        :   Internal with Left Null
+        :       
+        :   Internal with Right Null
+        :       
         
          <Internal Node with two children>
          :   If we have 2 child nodes, we have our hardest situation.  

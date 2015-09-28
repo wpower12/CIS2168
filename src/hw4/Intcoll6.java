@@ -16,10 +16,11 @@ public class Intcoll6 {
 
     /**
      * *
-     * We make this static so we can keep all the nodes enclodes in our outer
+     * We make this static so we can keep all the nodes enclosed in our outer
      * class. In java, a static class can only occur inside another class. The
      * behaviour is not like C/C++, static in this instance does not mean you
-     * can only have one instance of the class.
+     * can only have one instance of the class. It means the class is basically
+     * only envokeable from within the outer class? Ask.
      */
     private static class BTNode {
 
@@ -65,7 +66,22 @@ public class Intcoll6 {
      * Return: void
      */
     public void copy(Intcoll6 obj) {
+        c = copyNodes(obj.c);
+    }
 
+    /**
+     * Recursive function to copy nodes. Build a new node by recursivley copying
+     * its non null children.
+     */
+    private BTNode copyNodes(BTNode t) {
+        BTNode n = new BTNode(t.info);
+        if (t.left != null) {
+            n.left = copyNodes(t.left);
+        }
+        if (t.right != null) {
+            n.right = copyNodes(t.right);
+        }
+        return n;
     }
 
     /* Checks if the value is in the collection
@@ -136,17 +152,52 @@ public class Intcoll6 {
                 p = p.right;
             }
         }
-        //Now p points to either null, or a node with value i
         //This is where we write out the logic from the class examples
-        
-        if( p != null ){
+        if (p != null) {    //p either null or the node to delete.
             howmany--;
-            
-            //Leaf node
-            if( p.left != null && p.right != null ){
-                //Both children present.
-            } 
-            
+            if (p.left != null && p.right != null) {
+                //Both children present - Need to do the Hilbert Greedy Delete
+                BTNode old = p; //Saving the node we are overwriting.
+                //Finding the 'successor' - Leftmost leaf in right tree
+                pred = p;
+                p = p.right;
+                while (p.left != null) {
+                    pred = p;
+                    p = p.left;
+                }
+                //Overwriting the value. 
+                old.info = p.info;
+                pred.left = null;
+            } else if (p.left != null && p.right == null) {
+                //Only Left node exists.
+                if (pred != null) {
+                    if (p.info < pred.info) {
+                        pred.left = p.left;
+                    } else {
+                        pred.right = p.left;
+                    }
+                } else {    //Root case
+                    c = p.left;
+                }
+            } else if (p.right != null && p.left == null) {
+                //Only right node exists
+                if (pred != null) {
+                    if (p.info < pred.info) {
+                        pred.left = p.right;
+                    } else {
+                        pred.right = p.right;
+                    }
+                } else {    //Root case
+                    c = p.right;
+                }
+            } else {
+                //Both children null - leaf - easy!
+                if (p.info < pred.info) {
+                    pred.left = null;
+                } else {
+                    pred.right = null;
+                }
+            }
         }
     }
 
@@ -168,10 +219,27 @@ public class Intcoll6 {
         System.out.print(")\n");
     }
 
+    /**
+     * printnode - Recursivly print the tree in order. This works because our
+     * invariant for the datastructure is that all nodes in n.left are less than
+     * the value in the node, and all nodes in n.right are greater than the
+     * value in the node.
+     *
+     * We Do a check for null, then follow that guideline to print. First we
+     * print everything less than the given node, then we print the node, then
+     * we print everything greater than the node.
+     *
+     * This is, without a doubt, the coolest recursive thing I have seen in data
+     * structures.
+     *
+     * Apparently this greatly informs how we can recusivley define the delete
+     * methods later. For now, the delete method is implemented in an iterative
+     * manner. I'd like to get he recursive version working soon.
+     */
     private void printnode(BTNode n) {
         if (n != null) {
-            System.out.print(n.info+" ");
             printnode(n.left);
+            System.out.print(n.info + " ");
             printnode(n.right);
         }
     }
@@ -181,23 +249,66 @@ public class Intcoll6 {
      * Return: boolean, do they match?
      */
     public boolean equals(Intcoll6 obj) {
-        return false;
+        if (this != obj) {
+            return checkEquals(obj.c);
+        } else {
+            return true;
+        }
+    }
+    
+    //Look, recursive equals!
+    private boolean checkEquals(BTNode t) {
+        if (t != null) {
+            return this.belongs(t.info) && checkEquals(t.left) && checkEquals(t.right);
+        } else {    //Null leaves need to return true, or we poison our result
+            return true;
+        }
     }
 
     public static void main(String[] args) {
         Intcoll6 A = new Intcoll6();
+        A.insert(10);
         A.insert(1);
-        A.insert(15);
-        A.insert(10);
-        A.insert(10);
+        A.insert(16);
+        A.insert(20);
         A.insert(2000);
+        A.insert(15);
+        A.insert(13);
         A.print();
-        System.out.print("A.get_howmany(): "+A.get_howmany()+"\n");
-        System.out.print("A.belongs(8): "+A.belongs(8)+"\n");
-        System.out.print("A.belongs(10): "+A.belongs(10)+"\n");
-        
-        System.out.print("A.omit(2000): \n");
-        A.omit( 2000 );
+        System.out.print("A.get_howmany(): " + A.get_howmany() + "\n");
+        System.out.print("A.belongs(8): " + A.belongs(8) + "\n");
+        System.out.print("A.belongs(10): " + A.belongs(10) + "\n");
+
+        Intcoll6 B = new Intcoll6();
+        System.out.print("B.copy(A) \n");
+        B.copy(A);
+        System.out.print("B: ");
+        B.print();
+
+        System.out.print("Testing Omit Cases \n");
+        System.out.print("A.omit(2000), A:  \n");
+        A.omit(2000);
         A.print();
+
+        System.out.print("A.omit(1), A: \n");
+        A.omit(1);
+        A.print();
+
+        System.out.print("A.omit(15), A: \n");
+        A.omit(15);
+        A.print();
+
+        System.out.print("A.omit(10), A: \n");
+        A.omit(10);
+        A.print();
+
+        System.out.print("B: ");
+        B.print();
+
+        System.out.print("A.equals(B) = " + A.equals(B) + "\n");
+        System.out.print("B.copy(A) \n");
+        B.copy(A);
+        System.out.print("A.equals(B) = " + A.equals(B) + "\n");
+
     }
 }

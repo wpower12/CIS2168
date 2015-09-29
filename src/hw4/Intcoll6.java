@@ -134,14 +134,6 @@ public class Intcoll6 {
      * Input: int i, value to omit
      * Return: void
      */
-    /**
-     * Omit needs to implement the delete method discussed in the classexamples
-     * package.
-     *
-     * The three main cases need to be dealt with as we traverse the tree,
-     * starting at the root.
-     *
-     */
     public void omit(int i) {
         BTNode pred = null, p = c;
         while (p != null && p.info != i) {
@@ -152,7 +144,6 @@ public class Intcoll6 {
                 p = p.right;
             }
         }
-        //This is where we write out the logic from the class examples
         if (p != null) {    //p either null or the node to delete.
             howmany--;
             if (p.left != null && p.right != null) {
@@ -165,9 +156,10 @@ public class Intcoll6 {
                     pred = p;
                     p = p.left;
                 }
-                //Overwriting the value. 
+                //Overwriting the value and handling deleted nodes children.
                 old.info = p.info;
-                pred.left = null;
+                pred.left = pred.left.right;
+
             } else if (p.left != null && p.right == null) {
                 //Only Left node exists.
                 if (pred != null) {
@@ -215,32 +207,71 @@ public class Intcoll6 {
      */
     public void print() {
         System.out.print("( ");
-        printnode(c);
+        printnode_inorder(c);
+        //printnode_preorder(c);
+        //printnode_postorder(c);
         System.out.print(")\n");
     }
 
     /**
-     * printnode - Recursivly print the tree in order. This works because our
-     * invariant for the datastructure is that all nodes in n.left are less than
-     * the value in the node, and all nodes in n.right are greater than the
-     * value in the node.
+     * Types of Traversals
      *
-     * We Do a check for null, then follow that guideline to print. First we
-     * print everything less than the given node, then we print the node, then
-     * we print everything greater than the node.
+     * Traversing a data structure means accessing each member
+     * once and making it available for some execution. The order in which we
+     * hit the members varies based on the type. For n members in a collection
+     * there are n! ways to traverse them.
+     *
+     * <Preorder Traversal> RtLR 
+     * :     Visit t's root. - Do your code 
+     * :     Preorder traverse left subtree 
+     * :     Preorder traverse right subtree
+     *
+     * :    IOW - Always go left, at a leaf go back to last 'passed' right and then
+     * repeat
+     *
+     * <Inorder Traversal> LRtR 
+     * :    Traverse Left 
+     * :    Visit Root 
+     * :    Traverse Right
+     * 
+     * <Postorder Traversal> LRRt
+     * :    Traverse Left
+     * :    Traverse Right
+     * :    Visit Root
+     *
+     * <Leaf Ordering> Regardless of ordering, leaf nodes are always visited
+     * in the same order (in-order).  All traversals of BSTs have this property
+    
+     * printnode_<traversal> - Recursivly print the tree in the given order. 
+     * 
+     * We Do a check for null, then follow the traversal order. 
      *
      * This is, without a doubt, the coolest recursive thing I have seen in data
      * structures.
      *
      * Apparently this greatly informs how we can recusivley define the delete
      * methods later. For now, the delete method is implemented in an iterative
-     * manner. I'd like to get he recursive version working soon.
+     * manner. I'd like to get the recursive version working soon.
      */
-    private void printnode(BTNode n) {
+    private void printnode_preorder(BTNode n) {
         if (n != null) {
-            printnode(n.left);
             System.out.print(n.info + " ");
-            printnode(n.right);
+            printnode_preorder(n.left);
+            printnode_preorder(n.right);
+        }
+    }
+    private void printnode_postorder(BTNode n) {
+        if (n != null) {
+            printnode_postorder(n.left);
+            printnode_postorder(n.right);
+            System.out.print(n.info + " ");
+        }
+    }
+    private void printnode_inorder(BTNode n) {
+        if (n != null) {
+            printnode_inorder(n.left);
+            System.out.print(n.info + " ");
+            printnode_inorder(n.right);
         }
     }
 
@@ -255,11 +286,11 @@ public class Intcoll6 {
             return true;
         }
     }
-    
+
     //Look, recursive equals!
     private boolean checkEquals(BTNode t) {
         if (t != null) {
-            return this.belongs(t.info) && checkEquals(t.left) && checkEquals(t.right);
+            return belongs(t.info) && checkEquals(t.left) && checkEquals(t.right);
         } else {    //Null leaves need to return true, or we poison our result
             return true;
         }
@@ -267,6 +298,8 @@ public class Intcoll6 {
 
     public static void main(String[] args) {
         Intcoll6 A = new Intcoll6();
+
+        System.out.print("Testing Insert: \n");
         A.insert(10);
         A.insert(1);
         A.insert(16);
@@ -274,18 +307,20 @@ public class Intcoll6 {
         A.insert(2000);
         A.insert(15);
         A.insert(13);
+        A.insert(14);
+        System.out.print("A: ");
         A.print();
-        System.out.print("A.get_howmany(): " + A.get_howmany() + "\n");
+        System.out.print("\nA.get_howmany(): " + A.get_howmany() + "\n");
         System.out.print("A.belongs(8): " + A.belongs(8) + "\n");
         System.out.print("A.belongs(10): " + A.belongs(10) + "\n");
 
         Intcoll6 B = new Intcoll6();
-        System.out.print("B.copy(A) \n");
+        System.out.print("\nB.copy(A) \n");
         B.copy(A);
         System.out.print("B: ");
         B.print();
 
-        System.out.print("Testing Omit Cases \n");
+        System.out.print("\nTesting Omit Cases:  \n");
         System.out.print("A.omit(2000), A:  \n");
         A.omit(2000);
         A.print();
@@ -302,9 +337,13 @@ public class Intcoll6 {
         A.omit(10);
         A.print();
 
+        System.out.print("A.get_howmany(): " + A.get_howmany() + "\n");
+
+        System.out.print("\nTesting Copy - B was a deep copy, unchanged\n");
         System.out.print("B: ");
         B.print();
 
+        System.out.print("\nTesting Equals :\n");
         System.out.print("A.equals(B) = " + A.equals(B) + "\n");
         System.out.print("B.copy(A) \n");
         B.copy(A);

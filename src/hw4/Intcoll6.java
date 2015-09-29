@@ -74,7 +74,7 @@ public class Intcoll6 {
      * its non null children.
      *
      * A copy is essentially a traversal then.  So we can mirror the traversal
-     * code used in the print member.  We need to make sure we use a specific
+     * code used in the print method.  We need to make sure we use a specific
      * type of traversal.  <Preorder traversal> will make sure we insert in
      * the same order.  
      * 
@@ -83,9 +83,9 @@ public class Intcoll6 {
         BTNode n = null;
         if( t != null ){
             //Note the <Pre Order Traversal>
-            n = new BTNode(t.info);
+            n = new BTNode(t.info); //'Visit Root'
             n.left = copyNodes(t.left);
-            n.right = copyNodes(t.left);
+            n.right = copyNodes(t.right);
         }
         return n;
     }

@@ -72,14 +72,20 @@ public class Intcoll6 {
     /**
      * Recursive function to copy nodes. Build a new node by recursivley copying
      * its non null children.
+     *
+     * A copy is essentially a traversal then.  So we can mirror the traversal
+     * code used in the print member.  We need to make sure we use a specific
+     * type of traversal.  <Preorder traversal> will make sure we insert in
+     * the same order.  
+     * 
      */
     private BTNode copyNodes(BTNode t) {
-        BTNode n = new BTNode(t.info);
-        if (t.left != null) {
+        BTNode n = null;
+        if( t != null ){
+            //Note the <Pre Order Traversal>
+            n = new BTNode(t.info);
             n.left = copyNodes(t.left);
-        }
-        if (t.right != null) {
-            n.right = copyNodes(t.right);
+            n.right = copyNodes(t.left);
         }
         return n;
     }
@@ -221,30 +227,30 @@ public class Intcoll6 {
      * hit the members varies based on the type. For n members in a collection
      * there are n! ways to traverse them.
      *
-     * <Preorder Traversal> RtLR 
-     * :     Visit t's root. - Do your code 
-     * :     Preorder traverse left subtree 
-     * :     Preorder traverse right subtree
+     * <Preorder Traversal> RtLR
+     * : Visit t's root. - Do your code
+     * : Preorder traverse left subtree
+     * : Preorder traverse right subtree
      *
-     * :    IOW - Always go left, at a leaf go back to last 'passed' right and then
+     * : IOW - Always go left, at a leaf go back to last 'passed' right and then
      * repeat
      *
-     * <Inorder Traversal> LRtR 
-     * :    Traverse Left 
-     * :    Visit Root 
-     * :    Traverse Right
-     * 
+     * <Inorder Traversal> LRtR
+     * : Traverse Left
+     * : Visit Root
+     * : Traverse Right
+     *
      * <Postorder Traversal> LRRt
-     * :    Traverse Left
-     * :    Traverse Right
-     * :    Visit Root
+     * : Traverse Left
+     * : Traverse Right
+     * : Visit Root
      *
      * <Leaf Ordering> Regardless of ordering, leaf nodes are always visited
-     * in the same order (in-order).  All traversals of BSTs have this property
-    
-     * printnode_<traversal> - Recursivly print the tree in the given order. 
-     * 
-     * We Do a check for null, then follow the traversal order. 
+     * in the same order (in-order). All traversals of BSTs have this property
+     *
+     * printnode_<traversal> - Recursivly print the tree in the given order.
+     *
+     * We Do a check for null, then follow the traversal order.
      *
      * This is, without a doubt, the coolest recursive thing I have seen in data
      * structures.
@@ -260,6 +266,7 @@ public class Intcoll6 {
             printnode_preorder(n.right);
         }
     }
+
     private void printnode_postorder(BTNode n) {
         if (n != null) {
             printnode_postorder(n.left);
@@ -267,6 +274,7 @@ public class Intcoll6 {
             System.out.print(n.info + " ");
         }
     }
+
     private void printnode_inorder(BTNode n) {
         if (n != null) {
             printnode_inorder(n.left);

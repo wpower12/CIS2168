@@ -73,17 +73,21 @@ public class Intcoll6 {
      * Recursive function to copy nodes. Build a new node by recursivley copying
      * its non null children.
      *
-     * A copy is essentially a traversal then.  So we can mirror the traversal
-     * code used in the print method.  We need to make sure we use a specific
-     * type of traversal.  <Preorder traversal> will make sure we insert in
-     * the same order.  
-     * 
+     * A copy is essentially a traversal then. So we can mirror the traversal
+     * code used in the print method.
+     *
+     * If we want a copy that matches the structure of the source tree, we can
+     * either 'build up' with a postorder traversal or 'build down' with a
+     * preorder traversal. In this method, we create then node, then call
+     * the recursive method to create its children. IOW, were building down
+     * with a pre order traversal.
+     *
      */
     private BTNode copyNodes(BTNode t) {
         BTNode n = null;
-        if( t != null ){
+        if (t != null) {
             //Note the <Pre Order Traversal>
-            n = new BTNode(t.info); //'Visit Root'
+            n = new BTNode(t.info); //'Visit Root' and Build node first
             n.left = copyNodes(t.left);
             n.right = copyNodes(t.right);
         }
@@ -283,6 +287,52 @@ public class Intcoll6 {
         }
     }
 
+    /*
+     * Pretty Printing Trees 
+     *  This is a recursive method to print some trees.  This works by tracking
+     * a queue of characters as we go from node to node.  The push and pop
+     * functions just add and delete characters from the queue as we traverse
+     * the nodes in preorder.
+     * 
+     * The queue is tracking what characters need to 'go before' a node when we
+     * actually print its line to the console.  
+     */
+    
+    private String queue;
+    
+    public void prettyprint() {
+        queue = "";
+        p_print( c );
+    }   
+   
+    private void p_print(BTNode n) {
+        if (n != null) {
+            System.out.print("("+n.info+")\n");
+            if( n.left != null ){
+                System.out.print( queue.toString()+" `--" );
+                push('|');
+                p_print(n.left);
+                pop();
+            }
+            
+            if( n.right != null ){   
+                System.out.print( queue.toString()+" `--" );
+                push(' ');
+                p_print(n.right);
+                pop();
+            }
+        }
+    }
+
+    private void push(char c) {   
+        queue += " "+c+"  ";
+    }
+
+    private void pop() {
+        //This assumes the size of all pushes is 4, this needs to be tracked/changed
+        queue = queue.substring(0, queue.length()-4);
+    }
+
     /* Checks if given collection contains the same ints.
      * Input: Intcoll6 obj, the collection to be checked
      * Return: boolean, do they match?
@@ -329,10 +379,12 @@ public class Intcoll6 {
         B.print();
 
         System.out.print("\nTesting Omit Cases:  \n");
-        System.out.print("A.omit(2000), A:  \n");
-        A.omit(2000);
+        //Omit an internal node
+        System.out.print("A.omit(10), A:  \n");
+        A.omit(10);
         A.print();
-
+        
+        //Omit 1 child nodes
         System.out.print("A.omit(1), A: \n");
         A.omit(1);
         A.print();
@@ -340,9 +392,10 @@ public class Intcoll6 {
         System.out.print("A.omit(15), A: \n");
         A.omit(15);
         A.print();
-
+        
+        //Omit a leaf
         System.out.print("A.omit(10), A: \n");
-        A.omit(10);
+        A.omit(2000);
         A.print();
 
         System.out.print("A.get_howmany(): " + A.get_howmany() + "\n");
@@ -356,6 +409,19 @@ public class Intcoll6 {
         System.out.print("B.copy(A) \n");
         B.copy(A);
         System.out.print("A.equals(B) = " + A.equals(B) + "\n");
-
+        
+        
+        //Testing my pretty print
+        System.out.print("\nTesting Pretty Print: \n");
+        A.insert(10);
+        A.insert(1);
+        A.insert(16);
+        A.insert(20);
+        A.insert(2000);
+        A.insert(15);
+        A.insert(13);
+        A.insert(14);
+        
+        A.prettyprint();
     }
 }

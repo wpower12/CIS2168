@@ -67,6 +67,7 @@ public class Intcoll6 {
      */
     public void copy(Intcoll6 obj) {
         c = copyNodes(obj.c);
+        howmany = obj.get_howmany();
     }
 
     /**
@@ -297,58 +298,129 @@ public class Intcoll6 {
      * The queue is tracking what characters need to 'go before' a node when we
      * actually print its line to the console.  
      */
-    
     private String queue;
-    
+
     public void prettyprint() {
         queue = "";
-        p_print( c );
-    }   
-   
+        p_print(c);
+    }
+
     private void p_print(BTNode n) {
         if (n != null) {
-            System.out.print("("+n.info+")\n");
-            if( n.left != null ){
-                System.out.print( queue.toString()+" `--" );
+            System.out.print("(" + n.info + ")\n");
+            if (n.right != null) {
+                System.out.print(queue.toString() + " `--");
                 push('|');
-                p_print(n.left);
+                p_print(n.right);
                 pop();
             }
-            
-            if( n.right != null ){   
-                System.out.print( queue.toString()+" `--" );
-                push(' ');
-                p_print(n.right);
+            if (n.left != null) {
+                System.out.print(queue.toString() + " `--");
+                push(' ');  //Need to push the number of spaces equal to the 
+                            //Digits of the last top node printed?
+                p_print(n.left);
                 pop();
             }
         }
     }
 
-    private void push(char c) {   
-        queue += " "+c+"  ";
+    private void push(char c) {
+        queue += " " + c + "  ";
     }
 
     private void pop() {
         //This assumes the size of all pushes is 4, this needs to be tracked/changed
-        queue = queue.substring(0, queue.length()-4);
+        queue = queue.substring(0, queue.length() - 4);
     }
 
     /* Checks if given collection contains the same ints.
      * Input: Intcoll6 obj, the collection to be checked
      * Return: boolean, do they match?
      */
+    /**
+     * If we traverse one tree and do the check equals, we take time
+     * proportional to the depth of the tree we call .belongs() on
+     *
+     * So if we traverse the obj tree, and call belongs on ours, hopefully
+     * we have time O(logn) on our belongs.
+     *
+     * We can do even better!
+     *
+     * If we think of equals as comparing sorted arrays of the ints in the trees
+     * we can then imagine equals as comparing each slot and making sure its the
+     * same.
+     *
+     * Instead of actually keeping an array, we could just traverse both trees in
+     * order at the same time. While doing this, we make sure the n-est element
+     * (nth smallest elements) are the same. This leads to a equals method
+     * that occurs in O(n) time!!!
+     *
+     * Woot. This beats our recursive solutions average time of
+     * n items, logn belongs each: O(n logn)
+     *
+     *
+     *
+     * To simplify things, were gonna start with actually filling arrays and
+     * then checking. This is still order n.
+     *
+     *
+     */
     public boolean equals(Intcoll6 obj) {
-        if (this != obj) {
-            return checkEquals(obj.c);
-        } else {
-            return true;
+        boolean result = (this != obj) && (howmany == obj.howmany);
+        if (result) {
+            int[] a = new int[howmany];
+            int[] b = new int[howmany];
+            int count_a, count_b;
+
+            count_a = toArray(c, a, 0);
+            count_b = toArray(obj.c, b, 0);
+
+            int i = 0;
+            while (result && (i < howmany)) {
+                result = (a[i] == b[i]);
+                i++;
+            }
         }
+        return result;
+    }
+
+    /**
+     * toArray: Given a tree root, will fill array a with a sorted list of the
+     * integers contained in the tree. i is the number of nodes, tracked
+     * recursivley. Returns the number of nodes in the tree.
+     *
+     * This is an <Inorder Traversal> so we always travers left, visit the
+     * node, then traverse right.
+     *
+     * When we traverse left, we are looking at all the smaller nodes, so we
+     * know they will be in the array before the current node. So, we
+     * make num_nodes equal to all of the nodes that would be inserted by
+     * toArray on the left subtree. Since our method returns the count, we can
+     * do the recursive call as shown below.
+     *
+     * Notice, on the left traverse, we pass just i, the number of nodes already
+     * in the array.
+     *
+     * On the right traverse, we pass num_nodes+i+1 because we have added a node
+     * to the total node count, and then we add the nodes from the left sub tree.
+     * and we add all nodes from prior to this node (i).
+     *
+     * Since this happens recursivly, we know our num_node counts will be correct.
+     */
+    private static int toArray(BTNode t, int[] a, int i) {
+        int num_nodes = 0;
+        if (t != null) {
+            num_nodes = toArray(t.left, a, i);                //Left
+            a[num_nodes + 1] = t.info;                            //Visit
+            num_nodes += toArray(t.right, a, num_nodes + i + 1);  //Right
+        }
+        return num_nodes;
     }
 
     //Look, recursive equals!
-    private boolean checkEquals(BTNode t) {
+    private boolean recursiveEquals(BTNode t) {
         if (t != null) {
-            return belongs(t.info) && checkEquals(t.left) && checkEquals(t.right);
+            return belongs(t.info) && recursiveEquals(t.left) && recursiveEquals(t.right);
         } else {    //Null leaves need to return true, or we poison our result
             return true;
         }
@@ -383,7 +455,7 @@ public class Intcoll6 {
         System.out.print("A.omit(10), A:  \n");
         A.omit(10);
         A.print();
-        
+
         //Omit 1 child nodes
         System.out.print("A.omit(1), A: \n");
         A.omit(1);
@@ -392,7 +464,7 @@ public class Intcoll6 {
         System.out.print("A.omit(15), A: \n");
         A.omit(15);
         A.print();
-        
+
         //Omit a leaf
         System.out.print("A.omit(10), A: \n");
         A.omit(2000);
@@ -409,8 +481,7 @@ public class Intcoll6 {
         System.out.print("B.copy(A) \n");
         B.copy(A);
         System.out.print("A.equals(B) = " + A.equals(B) + "\n");
-        
-        
+
         //Testing my pretty print
         System.out.print("\nTesting Pretty Print: \n");
         A.insert(10);
@@ -421,7 +492,7 @@ public class Intcoll6 {
         A.insert(15);
         A.insert(13);
         A.insert(14);
-        
+
         A.prettyprint();
     }
 }

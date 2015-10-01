@@ -47,9 +47,9 @@ public class Intcoll5 {
      */
     public void copy(Intcoll5 obj) {
         this.c.clear();
-        ListIterator iter = obj.c.listIterator();
+        ListIterator<Integer> iter = obj.c.listIterator();
         while (iter.hasNext()) {
-            int n = (int) iter.next();
+            int n = iter.next();
             c.add(n);
         }
     }
@@ -118,13 +118,24 @@ public class Intcoll5 {
         B.insert(2);
         B.insert(25);
         B.insert(10);
-
+        
         System.out.println("A:");
         A.print();
 
         System.out.println("\nB:");
         B.print();
 
+        System.out.println("\nA.omit(1): ");
+        A.omit(1);
+        A.print();
+        System.out.println("\nA.omit(100): ");
+        A.omit(100);
+        A.print();
+        
+        System.out.println("\nA.copy(B): ");
+        A.copy(B);
+        A.print();
+        
         System.out.println("\nA == B : " + A.equals(B));
 
     }

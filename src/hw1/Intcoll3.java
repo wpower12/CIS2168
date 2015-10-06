@@ -128,7 +128,6 @@ public class Intcoll3 {
     public boolean equals(Intcoll3 obj) {
         int j = 1;
         boolean result = (obj.get_howmany() == howmany);
-        //Made changes here
         while ((j < c.length) && result) {
             result = (obj.belongs(j) == c[j]);
             j++;

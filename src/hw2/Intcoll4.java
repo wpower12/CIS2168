@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * **** Classwork for CIS2168 at Temple University ****
+ * File created and owned by William Power.
+ * No license.  It is against the academic honesty policy to
+ * copy the code in this file, or any file in the repo.
  */
 package hw2;
 
@@ -48,14 +49,6 @@ public class Intcoll4 {
      * Return: void
      */
     public void copy(Intcoll4 obj) {
-//        if ( this != obj ) {
-//            c = null;
-//            ListNode curr = obj.c;
-//            while (curr != null) {
-//                insert(curr.info);
-//                curr = curr.link;
-//            }
-//        }
         if( this != obj ){
             howmany = obj.get_howmany();
             ListNode curr = obj.c;
@@ -114,7 +107,7 @@ public class Intcoll4 {
         }
         if (curr != null) {
             if (prev == null) {
-                c = null;
+                c = curr.link;
             } else {
                 prev.link = curr.link;
             }
@@ -150,7 +143,7 @@ public class Intcoll4 {
      */
     public boolean equals(Intcoll4 obj) {
         ListNode curr = c;
-        boolean match = (howmany == obj.get_howmany());
+        boolean match = (obj != this) && (howmany == obj.get_howmany());
         while (curr != null && match) {
             if (!obj.belongs(curr.info)) {
                 match = false;

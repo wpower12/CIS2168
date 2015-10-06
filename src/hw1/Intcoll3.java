@@ -1,3 +1,9 @@
+/*
+ * **** Classwork for CIS2168 at Temple University ****
+ * File created and owned by William Power.
+ * No license.  It is against the academic honesty policy to
+ * copy the code in this file, or any file in the repo.
+ */
 package hw1;
 //*********************************************************************
 // FILE NAME    : Intcoll3.java
@@ -128,6 +134,7 @@ public class Intcoll3 {
     public boolean equals(Intcoll3 obj) {
         int j = 1;
         boolean result = (obj.get_howmany() == howmany);
+        //Made changes here
         while ((j < c.length) && result) {
             result = (obj.belongs(j) == c[j]);
             j++;

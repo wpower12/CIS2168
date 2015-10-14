@@ -13,7 +13,6 @@ package hw4;
  * @author wpower
  */
 public class Intcoll6 {
-
     /**
      * *
      * We make this static so we can keep all the nodes enclosed in our outer
@@ -159,7 +158,7 @@ public class Intcoll6 {
             howmany--;
             if (p.left != null && p.right != null) {
                 //Both children present - Need to do the Hilbert Greedy Delete
-                BTNode old = p; //Saving the node we are overwriting.
+                BTNode old = p; //Saving the node we are replacing.
                 BTNode old_pred = pred;
                 //Finding the 'predecessor' - rightmost leaf in left tree
                 pred = p;
@@ -388,10 +387,8 @@ public class Intcoll6 {
             int[] a = new int[howmany];
             int[] b = new int[howmany];
             int count_a, count_b;
-
             count_a = toArray(c, a, 0);
             count_b = toArray(obj.c, b, 0);
-
             int i = 0;
             while (result && (i < howmany)) {
                 result = (a[i] == b[i]);
@@ -434,7 +431,7 @@ public class Intcoll6 {
         return num_nodes;
     }
 
-    //Look, recursive equals!
+    //Look, recursive equals! - nlogn 
     private boolean recursiveEquals(BTNode t) {
         if (t != null) {
             return belongs(t.info) && recursiveEquals(t.left) && recursiveEquals(t.right);
@@ -491,7 +488,7 @@ public class Intcoll6 {
         System.out.print("A.get_howmany(): " + A.get_howmany() + "\n");
 
         System.out.print("\nTesting Copy - B was a deep copy, unchanged\n");
-        System.out.print("B: ");
+        System.out.print("B: \n");
         B.prettyprint();
 
         System.out.print("\nTesting Equals :\n");

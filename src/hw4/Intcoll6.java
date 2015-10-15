@@ -13,7 +13,6 @@ package hw4;
  * @author wpower
  */
 public class Intcoll6 {
-
     /**
      * *
      * We make this static so we can keep all the nodes enclosed in our outer
@@ -159,18 +158,33 @@ public class Intcoll6 {
             howmany--;
             if (p.left != null && p.right != null) {
                 //Both children present - Need to do the Hilbert Greedy Delete
-                BTNode old = p; //Saving the node we are overwriting.
-                //Finding the 'successor' - Leftmost leaf in right tree
+                BTNode old = p; //Saving the node we are replacing.
+                BTNode old_pred = pred;
+                //Finding the 'predecessor' - rightmost leaf in left tree
                 pred = p;
-                p = p.right;
-                while (p.left != null) {
+                p = p.left;
+                while (p.right != null) {
                     pred = p;
-                    p = p.left;
+                    p = p.right;
                 }
-                //Overwriting the value and handling deleted nodes children.
-                old.info = p.info;
-                pred.left = pred.left.right;
-
+                
+                //Handle children of predecessor/moved node
+                pred.left = p.left;
+                p.left = old.left;
+                p.right = old.right;
+                
+                if( old_pred != null ){
+                    //Not root
+                    if( p.info < old_pred.info ){
+                        old_pred.left = p;
+                    } else {
+                        old_pred.right = p;
+                    }
+                } else {
+                    //Root
+                    c = p;
+                }    
+                
             } else if (p.left != null && p.right == null) {
                 //Only Left node exists.
                 if (pred != null) {
@@ -296,7 +310,9 @@ public class Intcoll6 {
      * the nodes in preorder.
      * 
      * The queue is tracking what characters need to 'go before' a node when we
-     * actually print its line to the console.  
+     * actually print its line to the console.  Pre order helps us here because
+     * we will get them in an order that makes sense for printing in our nested
+     * method.
      */
     private String queue;
 
@@ -371,10 +387,8 @@ public class Intcoll6 {
             int[] a = new int[howmany];
             int[] b = new int[howmany];
             int count_a, count_b;
-
             count_a = toArray(c, a, 0);
             count_b = toArray(obj.c, b, 0);
-
             int i = 0;
             while (result && (i < howmany)) {
                 result = (a[i] == b[i]);
@@ -417,7 +431,7 @@ public class Intcoll6 {
         return num_nodes;
     }
 
-    //Look, recursive equals!
+    //Look, recursive equals! - nlogn 
     private boolean recursiveEquals(BTNode t) {
         if (t != null) {
             return belongs(t.info) && recursiveEquals(t.left) && recursiveEquals(t.right);
@@ -438,8 +452,8 @@ public class Intcoll6 {
         A.insert(15);
         A.insert(13);
         A.insert(14);
-        System.out.print("A: ");
-        A.print();
+        System.out.print("A: \n");
+        A.prettyprint();
         System.out.print("\nA.get_howmany(): " + A.get_howmany() + "\n");
         System.out.print("A.belongs(8): " + A.belongs(8) + "\n");
         System.out.print("A.belongs(10): " + A.belongs(10) + "\n");
@@ -447,34 +461,35 @@ public class Intcoll6 {
         Intcoll6 B = new Intcoll6();
         System.out.print("\nB.copy(A) \n");
         B.copy(A);
-        System.out.print("B: ");
-        B.print();
+        System.out.print("B: \n");
+        B.prettyprint();
 
         System.out.print("\nTesting Omit Cases:  \n");
-        //Omit an internal node
-        System.out.print("A.omit(10), A:  \n");
+        
+        //Omit a root internal node
+        System.out.print("A.omit(10), A:  Root Node\n");
         A.omit(10);
-        A.print();
+        A.prettyprint();
 
         //Omit 1 child nodes
-        System.out.print("A.omit(1), A: \n");
+        System.out.print("A.omit(1), A: Node w/ 1 Child\n");
         A.omit(1);
-        A.print();
+        A.prettyprint();
 
-        System.out.print("A.omit(15), A: \n");
+        System.out.print("A.omit(15), A: Node w/ 1 Child\n");
         A.omit(15);
-        A.print();
+        A.prettyprint();
 
         //Omit a leaf
-        System.out.print("A.omit(10), A: \n");
+        System.out.print("A.omit(2000), A: Leaf Node \n");
         A.omit(2000);
-        A.print();
+        A.prettyprint();
 
         System.out.print("A.get_howmany(): " + A.get_howmany() + "\n");
 
         System.out.print("\nTesting Copy - B was a deep copy, unchanged\n");
-        System.out.print("B: ");
-        B.print();
+        System.out.print("B: \n");
+        B.prettyprint();
 
         System.out.print("\nTesting Equals :\n");
         System.out.print("A.equals(B) = " + A.equals(B) + "\n");
@@ -482,17 +497,5 @@ public class Intcoll6 {
         B.copy(A);
         System.out.print("A.equals(B) = " + A.equals(B) + "\n");
 
-        //Testing my pretty print
-        System.out.print("\nTesting Pretty Print: \n");
-        A.insert(10);
-        A.insert(1);
-        A.insert(16);
-        A.insert(20);
-        A.insert(2000);
-        A.insert(15);
-        A.insert(13);
-        A.insert(14);
-
-        A.prettyprint();
     }
 }

@@ -53,7 +53,26 @@ public class Sorting {
     
     
     /**
+     * Merge Sort
      * 
+     * When we trace the execution of a recursive function, we can see that
+     * it forms a tree of sorts.  The tree shows what inputs the recursive call 
+     * is working on.
+            
+     For an array with 8 items, the tree would look like:
+    
+                       (0,7)
+           (0,3)                  (4,7)
+      (0,1)      (2,3)      (4,5)      (6,7)
+    (0,0)(1,1) (2,2)(3,3) (4,4)(5,5) (6,6)(7,7)
+    
+    Where (x,y) means mergesort(from_x, to_y) of Array
+    
+    That means the # of calls we actually make is the depth of the tree times
+    2 times the 'width' of the tree.  Or
+        f(n) = 2*n*log(n) , O(f(n)) = nlogn
+    
+    
      */
     public static void sort_merge(int[] a, int top, int bottom) {
         numcalls++;
@@ -98,13 +117,6 @@ public class Sorting {
     }
     
     /**
-     * 
-     */
-    public static void sort_insertion() {
-
-    }
-    
-    /**
      * Quick Sort
      * 
      * Sorts by selecting a pivot from a set of data, where everything greater
@@ -112,6 +124,27 @@ public class Sorting {
      * 
      * The selection of the pivot involves some manipulation of the array, but
      * is done in a way that rapidly speeds up the sorting process.
+    
+     * The invariant, or thing that is always the same from call to call, is 
+     * that the partition function always places one element, the pivot, into
+     * its sorted place in the array.  By definition, the array is organized
+     * such that the pivot has only elements smaller than it to its 'left' and
+     * only elements larger than it to its 'right'.  We'll see how this is done
+     * quickly in the actual partition function, but if you take it for granted
+     * now, you can see how simple the logic of the sort is.
+    
+     * We pick an element, and place it in its correct place in the array, and 
+     * by doing so, create two other sub arrays that are out of order wrt to
+     * each other, but are in the correct area of the original array.
+      
+     * Because these are now seperated by an element that is in its correct place,
+     * we can just call quicksort on these subarrays!  
+    
+     * Put on thing in order, Sort the things lower than it, sort the things 
+     * higher than it.  Thats all thats happening!  The magic comes from 
+     * moving the pivot into place.  If we do that while 'kinda' sorting the
+     * array, we can make our input smaller, which is the heart of recursive
+     * programming.
      */
     public static void sort_quick( int[] data, int i, int j ){
         int p;
@@ -124,18 +157,22 @@ public class Sorting {
     /**
      * Partitioning involves selecting an element for a pivot, in our class
      * we are doing a simple pivot selection.  The first element, the top,
-     * is always the pivot.
+     * is always the pivot.  
      * 
+     * We need to then place it in its correct position by swapping it with
+     * elements that are alternativly smaller or larger than it. 
+     
+     * As these swaps happen, the pivot will get closer to its actual place in
+     * the array, and the other elements will be place, correctly, either
+     * above or below the pivot.
+    
      * We alternate comparing the pivot to the 'bottom' and 'top'.  If it is
      * ever greater or smaller (respectivly), we exchange the pivot and that item
      * We then increment the pointer we exchanged with.
      * 
-     * The above is a reverse of what we want in class though, we want smaller 
-     * on the top, not bottom.
-     * 
-     * By doing this, we dont even have to look at every element in the sub 
-     * array!  This is what really makes it fast, its splitting and not really
-     * an n, but still kinda an n factor.
+     * We then return the index of the final position of the pivot.  This is so
+     * we know where the sub arrays start and end when we recursivly call 
+     * quicksort()
      */
     public static int partition( int[] data, int i, int j ){
         int upper = i, lower = j, save;
@@ -153,6 +190,15 @@ public class Sorting {
         }
         data[upper] = save;
         return upper;
+    }
+    
+    
+    
+    /**
+     * 
+     */
+    public static void sort_insertion() {
+
     }
     
     

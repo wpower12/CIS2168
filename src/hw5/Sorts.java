@@ -7,6 +7,7 @@
 package hw5;
 
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * Sorts!
@@ -87,34 +88,50 @@ public class Sorts {
     }
 
     private static void quicksort(int[] data, int i, int j) {
-        if (i < j) {
-            int upper = i, lower = j, save;
-            save = data[i];
+        int p, top, bottom;
+        Stack<Integer> s = new Stack<>();
 
-            while (upper != lower) {
-                while ((upper < lower) && (save < data[lower])) {
-                    lower--;
-                    qcount++;
+        s.push(j);
+        s.push(i);
+        while (!s.empty()) {
+            top = s.pop();
+            bottom = s.pop();
+            while (top < bottom) {
+                p = partition(data, top, bottom);
+                if ((p - top) > (bottom - p)) {
+                    s.push(p - 1);
+                    s.push(top);
+                    top = p + 1;
+                } else {
+                    s.push(bottom);
+                    s.push(p + 1);
+                    bottom = p - 1;
                 }
-                if (upper != lower) {
-                    data[upper] = data[lower];
-                }
-                while ((upper < lower) && (save > data[upper])) {
-                    upper++;
-                    qcount++;
-                }
-                if (upper != lower) {
-                    data[lower] = data[upper];
-                }
-            }
-            data[upper] = save;
-            if( lower < i ){
-                quicksort(data, i, upper - 1);    //Sort the things above/below pivot
-            }
-            if( upper > j ){
-                quicksort(data, upper + 1, j);
             }
         }
+    }
+
+    private static int partition(int[] data, int i, int j) {
+        int upper, lower, save;
+        upper = i;
+        lower = j;
+        save = data[i];
+        while (upper != lower) {
+            while ((upper < lower) && (save <= data[lower])) {
+                lower--; qcount++;
+            }
+            if (upper != lower) {
+                data[upper] = data[lower];
+            }
+            while ((upper < lower) && (save >= data[upper])) {
+                upper++; qcount++;
+            }
+            if (upper != lower) {
+                data[lower] = data[upper];
+            }
+        }
+        data[upper] = save;
+        return (upper);
     }
 
     /**
@@ -228,10 +245,7 @@ public class Sorts {
             min = Integer.MAX_VALUE;
             for (int i = 0; i < k; i++) {
                 fill_random_array(a, sizes[s], MAXINT);
-                
-                //TODO - Fix your terrible quick sort.
-                //Sorts.quicksort(a);
-                
+                Sorts.quicksort(a);
                 sum += Sorts.qcount;
                 if (Sorts.qcount > max) {
                     max = Sorts.qcount;

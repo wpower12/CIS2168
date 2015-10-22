@@ -34,7 +34,7 @@ package classnotes;
  * 'candidate' slot in the storage, we consider it a 'probe'.  The first probe
  * just finds the slot corresponding to the hash function.  If we find a full
  * slot there, increment the pointer you are using to address the array, and 
- * check there.  Continue until a slot is found for the value.
+ * check there.  Continue until an empty slot is found for the value.
  * 
  * Once a table becomes dense, linear probing is often and costly.  Therefore, 
  * its important to keep size and spareness into account when crafting a 
@@ -78,6 +78,15 @@ package classnotes;
  * 
  * Searching in this list type hash table is also simple.  Hash the nodes value,
  * then traverse the list found there to check for the node.
+ * 
+ * <Performace>
+ * 
+ * If we had an infinitely sized array, we could get constant time search, delete
+ * and insert.  
+ * 
+ * Hash tables allow us to approximate this.  A good hash function, with a well
+ * selected collision scheme, will give a client something that approaches 
+ * constant time for all 3 main collection operations.
  * 
  * @author wpower
  */

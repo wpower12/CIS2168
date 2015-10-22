@@ -107,8 +107,7 @@ public class Sorts {
                 if ((p - top) > (bottom - p)) {
                     s.push(p - 1);
                     s.push(top);
-                    top = p + 1;    //Here we move the pointer, so we look at a
-                                    //new sub array in the next loop
+                    top = p + 1;    //
                 } else {
                     s.push(bottom); //Same as above, but looking at the other 'half'
                     s.push(p + 1);

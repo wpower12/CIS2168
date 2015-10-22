@@ -4,7 +4,9 @@
  * No license.  It is against the academic honesty policy to
  * copy the code in this file, or any file in the repo.
  */
-package classnotes;
+package classnotes.stacks;
+
+import java.util.Stack;
 
 /**
  * <Recursive Traversals vs Imperative Traversals>
@@ -42,7 +44,7 @@ public class MoreTraversals {
             right = r;
         }
     }
-    private static Stack stack;  //Pretend you have a container with the stack api
+    private static Stack<BTNode> stack;  //Pretend you have a container with the stack api
     
     public static void preorder_traverse( BTNode t ){
     /**
@@ -55,6 +57,7 @@ public class MoreTraversals {
      * right.
      * 
      */
+        stack = new Stack();
         BTNode p = t;
         while( (p != null) || !stack.empty()){
             //visit( p ); If we had something to do. 

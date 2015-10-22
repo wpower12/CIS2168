@@ -6,22 +6,25 @@
  */
 package ec1;
 
+import java.util.Stack;
+
 /**
  * <Extra Credit>
- * 
+ *
  * Implement:
-       btNode remove( btNode t, int i )
-
-       returns the root of a tree that has all elements greater than i removed
-
-   Turn In:
-        Recursive Version
-
-        Iterative Version
+ * btNode remove( btNode t, int i )
+ *
+ * returns the root of a tree that has all elements greater than i removed
+ *
+ * Turn In:
+ * Recursive Version
+ *
+ * Iterative Version
  *
  * @author wpower
  */
 public class IntcollEC1 {
+
     /**
      * *
      * We make this static so we can keep all the nodes enclosed in our outer
@@ -176,15 +179,15 @@ public class IntcollEC1 {
                     pred = p;
                     p = p.right;
                 }
-                
+
                 //Handle children of predecessor/moved node
                 pred.left = p.left;
                 p.left = old.left;
                 p.right = old.right;
-                
-                if( old_pred != null ){
+
+                if (old_pred != null) {
                     //Not root
-                    if( p.info < old_pred.info ){
+                    if (p.info < old_pred.info) {
                         old_pred.left = p;
                     } else {
                         old_pred.right = p;
@@ -192,8 +195,8 @@ public class IntcollEC1 {
                 } else {
                     //Root
                     c = p;
-                }    
-                
+                }
+
             } else if (p.left != null && p.right == null) {
                 //Only Left node exists.
                 if (pred != null) {
@@ -290,7 +293,7 @@ public class IntcollEC1 {
             if (n.left != null) {
                 System.out.print(queue.toString() + " `--");
                 push(' ');  //Need to push the number of spaces equal to the 
-                            //Digits of the last top node printed?
+                //Digits of the last top node printed?
                 p_print(n.left);
                 pop();
             }
@@ -340,34 +343,53 @@ public class IntcollEC1 {
             return true;
         }
     }
-    
-    public void remove( int n ){
-        
+
+    public void remove(int n) {
         c = remove_recursive( c, n );
-        
+        //c = remove_imperative(c, n);
     }
-    
-    private BTNode remove_recursive(BTNode t, int n){
-        if( t == null ){
-            return null;
+
+    private BTNode remove_recursive(BTNode t, int n) {
+        if (t == null) {
+            return null;    //Base Case
         } else {
-            if( t.info <= n ){
-                BTNode tn = new BTNode( t.info );
-                tn.left = remove_recursive( t.left, n );
-                tn.right = remove_recursive(t.right, n);
-                return tn;
+            if (t.info <= n) {  //If info is less than n, we include this node.
+                t.left = remove_recursive(t.left, n);    //Recursive calls to
+                t.right = remove_recursive(t.right, n);    //build child trees
+                return t;
             } else {
-                return remove_recursive( t.left, n );
+                //Else, t is a node that we do not want to include in the result
+                //We note that if this is the case, then everything in t's
+                //right subtree is also larger than n, and we dont need it.  so
+                //we can 'link' the parent of t to the tree we 
+                //get by calling remove on t's left child.
+                return remove_recursive(t.left, n);
             }
         }
     }
-    
-    private BTNode remove_imperative(BTNode t, int n){
+
+    private BTNode remove_imperative(BTNode t, int n) {
+        Stack<BTNode> stack = new Stack<>();
+        BTNode root, pred;
+        //rtLR
+        stack.push( null ); //Pred
+        stack.push( t );    //Inital root
+        while( !stack.empty() ){
+        //Visit Root - Either Keep Node or make pred.right = rt.left
+            root = stack.pop();
+            pred = stack.pop();
+//            if( ){
+//                
+//            }
+        //Push Left to Stack
+            //Push correct pred
+        //Push Right to Stack
+            //Push correct pred
         
-        return null;
+        }
+        return t;
     }
-    
-    
+
     public static void main(String[] args) {
         IntcollEC1 A = new IntcollEC1();
 
@@ -382,12 +404,13 @@ public class IntcollEC1 {
         A.insert(13);
         A.insert(14);
         A.insert(100);
-        
+
         System.out.print("A: \n");
         A.prettyprint();
-        
-        //A.remove( 18 );
+
+        A.remove(18);
         System.out.print("A.remove(18): \n");
         A.prettyprint();
+        
     }
 }

@@ -4,9 +4,10 @@
  * No license.  It is against the academic honesty policy to
  * copy the code in this file, or any file in the repo.
  */
-package classnotes;
+package classnotes.inheritance;
 
 /**
+ * <Class Interfaces>
  * We've seen how we need to type all the data that we store in somethign like
  * intcoll.  How would we change our code to handle storing other types?
  * 

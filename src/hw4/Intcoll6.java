@@ -22,7 +22,6 @@ public class Intcoll6 {
      * only envokeable from within the outer class? Ask.
      */
     private static class BTNode {
-
         int info;
         BTNode left, right;
 
@@ -175,11 +174,12 @@ public class Intcoll6 {
                 
                 if( old_pred != null ){
                     //Not root
-                    if( p.info < old_pred.info ){
-                        old_pred.left = p;
-                    } else {
-                        old_pred.right = p;
-                    }
+//                    if( p.info < old_pred.info ){
+//                        old_pred.left = p;
+//                    } else {
+//                        old_pred.right = p;
+//                    }
+                    old_pred.left = p;
                 } else {
                     //Root
                     c = p;
@@ -454,6 +454,7 @@ public class Intcoll6 {
         A.insert(14);
         System.out.print("A: \n");
         A.prettyprint();
+        A.print();
         System.out.print("\nA.get_howmany(): " + A.get_howmany() + "\n");
         System.out.print("A.belongs(8): " + A.belongs(8) + "\n");
         System.out.print("A.belongs(10): " + A.belongs(10) + "\n");
@@ -470,12 +471,14 @@ public class Intcoll6 {
         System.out.print("A.omit(10), A:  Root Node\n");
         A.omit(10);
         A.prettyprint();
+        System.out.print("A.belongs(10): " + A.belongs(10) + "\n");
 
         //Omit 1 child nodes
         System.out.print("A.omit(1), A: Node w/ 1 Child\n");
         A.omit(1);
         A.prettyprint();
-
+        System.out.print("A.belongs(1): " + A.belongs(1) + "\n");
+        
         System.out.print("A.omit(15), A: Node w/ 1 Child\n");
         A.omit(15);
         A.prettyprint();

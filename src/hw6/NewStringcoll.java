@@ -7,15 +7,9 @@
 package hw6;
 
 /**
- * Replace all elements in an intcollclient so that it uses Strings instead of
- * integers.
- * 
- * Also, user input has to be changed.
- * +<word> adds word to P, L
- * -<word> adds word to N, removes word from P
- * 
+ *
  * @author wpower
  */
-public class StringcollClient {
+public class NewStringcoll extends MultiStringcoll {
     
 }

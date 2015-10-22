@@ -4,14 +4,12 @@
  * No license.  It is against the academic honesty policy to
  * copy the code in this file, or any file in the repo.
  */
-package classnotes;
+package classnotes.inheritance;
 
 /**
- * @author wpower
  *
- * <Recursion> is the process of splitting up a smaller 
- * 
+ * @author wpower
  */
-public class Recursion {
+public class Box {
     
 }

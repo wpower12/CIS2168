@@ -16,7 +16,7 @@ public class QuickSortTest {
     
     public static void main(String[] args)
    {
-      Random gen=new Random(); int[] a=new int[50];
+      Random gen=new Random(); int[] a=new int[25];
       int i; for (i=0; i<a.length; i++) a[i]=gen.nextInt(5000)+1;
       
       System.out.println("Initial array:");

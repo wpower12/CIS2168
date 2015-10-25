@@ -358,11 +358,6 @@ public class IntcollEC1 {
                 t.right = remove_recursive(t.right, n);    //build child trees
                 return t;
             } else {
-                //Else, t is a node that we do not want to include in the result
-                //We note that if this is the case, then everything in t's
-                //right subtree is also larger than n, and we dont need it.  so
-                //we can 'link' the parent of t to the tree we 
-                //get by calling remove on t's left child.
                 return remove_recursive(t.left, n);
             }
         }

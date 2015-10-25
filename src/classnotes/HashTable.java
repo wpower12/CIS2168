@@ -88,6 +88,14 @@ package classnotes;
  * selected collision scheme, will give a client something that approaches 
  * constant time for all 3 main collection operations.
  * 
+ * 
+ * <Comparison>
+ * 
+ * The hash table is stupid fast with a good function and space. 
+ * 
+ * Its killing other collections in Profs examples.
+ * 
+ * 
  * @author wpower
  */
 public class HashTable {

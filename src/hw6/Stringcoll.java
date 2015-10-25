@@ -9,29 +9,14 @@ package hw6;
 /**
  * Replace all needed elements to make intcoll6 work while storing strings,
  * not integers.
- * 
- * Also, we now want to account for multiples of the same String.  We can have 
- * more than one of the same String.
  *
- * To do this, we add a count field to the btNode class.  When we insert, we 
- * traverse as normal, but now if we find a node with the same string, we increment
- * its count instead of doing nothing.  If we find nothing, we insert a new leaf
- * node with a starting count of 1.
- * 
- * omit(String)  we want to remove just one of the copies, if there's only 1 then remove it
- * 
- * belongs(String) will return how many times the string is in the collection
- * 
- * print() will return all the strings, and their count next to them.
- * 
- * get_howmany() should return the total number of strings, including duplicates.
- * 
- * DONT EXTEND ANYTHING HERE.  THIS IS THE BASE CLASS
- * 
+ * DONT EXTEND ANYTHING HERE. THIS IS THE BASE CLASS
+ *
  * @author wpower
  */
 public class Stringcoll {
-        /**
+
+    /**
      * *
      * We make this static so we can keep all the nodes enclosed in our outer
      * class. In java, a static class can only occur inside another class. The
@@ -40,17 +25,18 @@ public class Stringcoll {
      * only envokeable from within the outer class? Ask.
      */
     private static class BTNode {
-        int info;
+
+        String info;
         BTNode left, right;
 
-        private BTNode(int i) {
-            info = i;
+        private BTNode(String s) {
+            info = s;
             left = null;
             right = null;
         }
 
-        private BTNode(int i, BTNode l, BTNode r) {
-            info = i;
+        private BTNode(String s, BTNode l, BTNode r) {
+            info = s;
             left = l;
             right = r;
         }
@@ -115,27 +101,27 @@ public class Stringcoll {
      * Input: int i, value to search for
      * Return: boolean
      */
-    public boolean belongs(int i) {
+    public int belongs(String s) {
         BTNode p = c;
-        while (p != null && p.info != i) {
-            if (i < p.info) {
+        while (p != null && !p.info.equals(s)) {
+            if (p.info.compareTo(s) < 0) {
                 p = p.left;
             } else {
                 p = p.right;
             }
         }
-        return p != null;
+        return (p != null) ? 1:0;
     }
 
     /* Inserts the value into the list if not already present.  Handles resizing.
      * Input: int i, value to insert
      * Return: void
      */
-    public void insert(int i) {
+    public void insert(String s) {
         BTNode pred = null, p = c;
-        while (p != null && p.info != i) {
+        while (p != null && !(p.info.compareTo(s) == 0)) {
             pred = p;
-            if (i < p.info) {
+            if (p.info.compareTo(s) > 0) {
                 p = p.left;
             } else {
                 p = p.right;
@@ -143,11 +129,11 @@ public class Stringcoll {
         }
 
         if (p == null) {
-            p = new BTNode(i);
+            p = new BTNode(s);
             if (pred == null) {
                 c = p;
             } else {
-                if (i < pred.info) {
+                if (pred.info.compareTo(s) > 0) {
                     pred.left = p;
                 } else {
                     pred.right = p;
@@ -161,11 +147,11 @@ public class Stringcoll {
      * Input: int i, value to omit
      * Return: void
      */
-    public void omit(int i) {
+    public void omit(String s) {
         BTNode pred = null, p = c;
-        while (p != null && p.info != i) {
+        while (p != null && !(p.info.compareTo(s) == 0)) {
             pred = p;
-            if (i < p.info) {
+            if (p.info.compareTo(s) > 0) {
                 p = p.left;
             } else {
                 p = p.right;
@@ -184,29 +170,27 @@ public class Stringcoll {
                     pred = p;
                     p = p.right;
                 }
-                
+
                 //Handle children of predecessor/moved node
-                pred.left = p.left;
+                if (p == old.left) {
+                    pred.left = p.left;
+                } else {
+                    pred.right = p.left;
+                }
                 p.left = old.left;
                 p.right = old.right;
-                
-                if( old_pred != null ){
-                    //Not root
-//                    if( p.info < old_pred.info ){
-//                        old_pred.left = p;
-//                    } else {
-//                        old_pred.right = p;
-//                    }
+
+                if (old_pred != null) {
                     old_pred.left = p;
                 } else {
                     //Root
                     c = p;
-                }    
-                
+                }
+
             } else if (p.left != null && p.right == null) {
                 //Only Left node exists.
                 if (pred != null) {
-                    if (p.info < pred.info) {
+                    if (pred.info.compareTo(p.info) > 0) {
                         pred.left = p.left;
                     } else {
                         pred.right = p.left;
@@ -217,7 +201,7 @@ public class Stringcoll {
             } else if (p.right != null && p.left == null) {
                 //Only right node exists
                 if (pred != null) {
-                    if (p.info < pred.info) {
+                    if (pred.info.compareTo(p.info) > 0) {
                         pred.left = p.right;
                     } else {
                         pred.right = p.right;
@@ -227,7 +211,7 @@ public class Stringcoll {
                 }
             } else {
                 //Both children null - leaf - easy!
-                if (p.info < pred.info) {
+                if (pred.info.compareTo(p.info) > 0) {
                     pred.left = null;
                 } else {
                     pred.right = null;
@@ -254,62 +238,6 @@ public class Stringcoll {
         //printnode_preorder(c);
         //printnode_postorder(c);
         System.out.print(")\n");
-    }
-
-    /**
-     * Types of Traversals
-     *
-     * Traversing a data structure means accessing each member
-     * once and making it available for some execution. The order in which we
-     * hit the members varies based on the type. For n members in a collection
-     * there are n! ways to traverse them.
-     *
-     * <Preorder Traversal> RtLR
-     * : Visit t's root. - Do your code
-     * : Preorder traverse left subtree
-     * : Preorder traverse right subtree
-     *
-     * : IOW - Always go left, at a leaf go back to last 'passed' right and then
-     * repeat
-     *
-     * <Inorder Traversal> LRtR
-     * : Traverse Left
-     * : Visit Root
-     * : Traverse Right
-     *
-     * <Postorder Traversal> LRRt
-     * : Traverse Left
-     * : Traverse Right
-     * : Visit Root
-     *
-     * <Leaf Ordering> Regardless of ordering, leaf nodes are always visited
-     * in the same order (in-order). All traversals of BSTs have this property
-     *
-     * printnode_<traversal> - Recursivly print the tree in the given order.
-     *
-     * We Do a check for null, then follow the traversal order.
-     *
-     * This is, without a doubt, the coolest recursive thing I have seen in data
-     * structures.
-     *
-     * Apparently this greatly informs how we can recusivley define the delete
-     * methods later. For now, the delete method is implemented in an iterative
-     * manner. I'd like to get the recursive version working soon.
-     */
-    private void printnode_preorder(BTNode n) {
-        if (n != null) {
-            System.out.print(n.info + " ");
-            printnode_preorder(n.left);
-            printnode_preorder(n.right);
-        }
-    }
-
-    private void printnode_postorder(BTNode n) {
-        if (n != null) {
-            printnode_postorder(n.left);
-            printnode_postorder(n.right);
-            System.out.print(n.info + " ");
-        }
     }
 
     private void printnode_inorder(BTNode n) {
@@ -351,7 +279,7 @@ public class Stringcoll {
             if (n.left != null) {
                 System.out.print(queue.toString() + " `--");
                 push(' ');  //Need to push the number of spaces equal to the 
-                            //Digits of the last top node printed?
+                //Digits of the last top node printed?
                 p_print(n.left);
                 pop();
             }
@@ -402,8 +330,8 @@ public class Stringcoll {
     public boolean equals(Stringcoll obj) {
         boolean result = (this != obj) && (howmany == obj.howmany);
         if (result) {
-            int[] a = new int[howmany];
-            int[] b = new int[howmany];
+            String[] a = new String[howmany];
+            String[] b = new String[howmany];
             int count_a, count_b;
             count_a = toArray(c, a, 0);
             count_b = toArray(obj.c, b, 0);
@@ -439,7 +367,7 @@ public class Stringcoll {
      *
      * Since this happens recursivly, we know our num_node counts will be correct.
      */
-    private static int toArray(BTNode t, int[] a, int i) {
+    private static int toArray(BTNode t, String[] a, int i) {
         int num_nodes = 0;
         if (t != null) {
             num_nodes = toArray(t.left, a, i);                //Left
@@ -452,10 +380,69 @@ public class Stringcoll {
     //Look, recursive equals! - nlogn 
     private boolean recursiveEquals(BTNode t) {
         if (t != null) {
-            return belongs(t.info) && recursiveEquals(t.left) && recursiveEquals(t.right);
+            return (belongs(t.info)==1) && recursiveEquals(t.left) && recursiveEquals(t.right);
         } else {    //Null leaves need to return true, or we poison our result
             return true;
         }
+    }
+
+    public static void main(String args[]) {
+
+        Stringcoll A = new Stringcoll();
+        Stringcoll B = new Stringcoll();
+
+        A.insert("e");
+        A.insert("c");
+        A.insert("b");
+        A.insert("d");
+        A.insert("a");
+        A.insert("l");
+        A.insert("m");
+        A.insert("q");
+        A.insert("z");
+        A.insert("w");
+        
+        B.copy(A);
+        A.prettyprint();
+
+        String c;
+
+        //Internal, Non Root Omit
+        c = "c";
+        System.out.println("A.omit(" + c + ")");
+        A.omit(c);
+        A.prettyprint();
+
+        //Internal, Root Omit
+        c = "e";
+        System.out.println("A.omit(" + c + ")");
+        A.omit(c);
+        A.prettyprint();
+
+        //One childs
+        c = "m";
+        System.out.println("A.omit(" + c + ")");
+        A.omit(c);
+        A.prettyprint();
+        c = "q";
+        System.out.println("A.omit(" + c + ")");
+        A.omit(c);
+        A.prettyprint();
+
+        //Leaf Omit
+        c = "w";
+        System.out.println("A.omit(" + c + ")");
+        A.omit(c);
+        A.prettyprint();
+        
+        //Deep Copy/Equals
+        System.out.println("B:");
+        B.prettyprint();
+        
+        System.out.println("A.equals(B)= false? : "+A.equals(B));
+        System.out.println("A.copy(B)");
+        A.copy(B);
+        System.out.println("A.equals(B)= true? : "+A.equals(B));
     }
 
 }

@@ -7,6 +7,7 @@
 package hw6;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * Extend the Stringcoll client to track multiple entries for the same
@@ -78,6 +79,12 @@ public class MultiStringcoll extends Stringcoll {
         }
     }
     
+    public void copy( MultiStringcoll obj ){
+        HashMap newMap = new HashMap(obj.counts);
+        counts = newMap;
+        super.copy(obj);
+    }
+    
     public int belongs( String s ){
         if( counts.containsKey(s) ){
             return counts.get(s);
@@ -88,6 +95,26 @@ public class MultiStringcoll extends Stringcoll {
     
     public void print(){
         
+        counts.entrySet().stream().forEach((e) -> {
+            String key = e.getKey();
+            Integer v  = e.getValue();
+            if( v > 1 ){
+                System.out.println( key+" "+v.toString() );
+            } else {
+                System.out.println(key);
+            }
+        });
+    }
+    
+    public boolean equals( MultiStringcoll obj ){
+        boolean res = ( this != obj && (this.counts.size() == obj.counts.size()));
+        for( Entry e : this.counts.entrySet() ){
+            if( !obj.counts.containsKey(e.getKey()) || !res){
+                res = false;
+                break;
+            }
+        }
+        return res;
     }
     
     public static void main(String a[]){
@@ -100,6 +127,8 @@ public class MultiStringcoll extends Stringcoll {
         A.insert("b");
         A.insert("b");
         
+        A.print();
+        
         System.out.println("A.belongs(a)="+A.belongs("a"));
         System.out.println("A.get_howmany="+A.get_howmany());
         A.omit("a");
@@ -108,5 +137,6 @@ public class MultiStringcoll extends Stringcoll {
         
         System.out.println("A.get_howmany="+A.get_howmany());
         
+        A.print();
     }
 }

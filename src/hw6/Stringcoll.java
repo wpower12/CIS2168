@@ -25,8 +25,8 @@ public class Stringcoll {
      * only envokeable from within the outer class? Ask.
      */
     private static class BTNode {
-
         String info;
+        int count;
         BTNode left, right;
 
         private BTNode(String s) {
@@ -337,7 +337,7 @@ public class Stringcoll {
             count_b = toArray(obj.c, b, 0);
             int i = 0;
             while (result && (i < howmany)) {
-                result = (a[i] == b[i]);
+                result = (a[i].equals(b[i]));
                 i++;
             }
         }

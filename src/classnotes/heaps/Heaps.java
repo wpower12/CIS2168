@@ -50,7 +50,7 @@ package classnotes.heaps;
 public class Heaps {
 
     public static Tree makeHeap(Tree t) {
-        Tree b;
+        Tree b = new Tree();
         int N = t.size();
         //For each node, starting at 2
         for (int i = 2; i < N; i++) {

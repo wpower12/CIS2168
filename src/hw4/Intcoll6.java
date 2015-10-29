@@ -13,6 +13,7 @@ package hw4;
  * @author wpower
  */
 public class Intcoll6 {
+
     /**
      * *
      * We make this static so we can keep all the nodes enclosed in our outer
@@ -22,6 +23,7 @@ public class Intcoll6 {
      * only envokeable from within the outer class? Ask.
      */
     private static class BTNode {
+
         int info;
         BTNode left, right;
 
@@ -162,29 +164,27 @@ public class Intcoll6 {
                 //Finding the 'predecessor' - rightmost leaf in left tree
                 pred = p;
                 p = p.left;
+
                 while (p.right != null) {
                     pred = p;
                     p = p.right;
                 }
-                
+
                 //Handle children of predecessor/moved node
-                pred.left = p.left;
+                if (p == old.left) {
+                    pred.left = p.left;
+                } else {
+                    pred.right = p.left;
+                }
                 p.left = old.left;
                 p.right = old.right;
-                
-                if( old_pred != null ){
-                    //Not root
-//                    if( p.info < old_pred.info ){
-//                        old_pred.left = p;
-//                    } else {
-//                        old_pred.right = p;
-//                    }
+
+                if (old_pred != null) {
                     old_pred.left = p;
                 } else {
-                    //Root
                     c = p;
-                }    
-                
+                }
+
             } else if (p.left != null && p.right == null) {
                 //Only Left node exists.
                 if (pred != null) {
@@ -333,7 +333,7 @@ public class Intcoll6 {
             if (n.left != null) {
                 System.out.print(queue.toString() + " `--");
                 push(' ');  //Need to push the number of spaces equal to the 
-                            //Digits of the last top node printed?
+                //Digits of the last top node printed?
                 p_print(n.left);
                 pop();
             }
@@ -443,62 +443,81 @@ public class Intcoll6 {
     public static void main(String[] args) {
         Intcoll6 A = new Intcoll6();
 
-        System.out.print("Testing Insert: \n");
-        A.insert(10);
-        A.insert(1);
-        A.insert(16);
-        A.insert(20);
-        A.insert(2000);
-        A.insert(15);
-        A.insert(13);
-        A.insert(14);
-        System.out.print("A: \n");
-        A.prettyprint();
-        A.print();
-        System.out.print("\nA.get_howmany(): " + A.get_howmany() + "\n");
-        System.out.print("A.belongs(8): " + A.belongs(8) + "\n");
-        System.out.print("A.belongs(10): " + A.belongs(10) + "\n");
+        A.insert(100);
+        A.insert(250);
+        A.insert(225);
+        A.insert(300);
+        A.insert(43);
+        A.insert(25);
+        A.insert(22);
+        A.insert(46);
 
-        Intcoll6 B = new Intcoll6();
-        System.out.print("\nB.copy(A) \n");
-        B.copy(A);
-        System.out.print("B: \n");
-        B.prettyprint();
-
-        System.out.print("\nTesting Omit Cases:  \n");
-        
-        //Omit a root internal node
-        System.out.print("A.omit(10), A:  Root Node\n");
-        A.omit(10);
-        A.prettyprint();
-        System.out.print("A.belongs(10): " + A.belongs(10) + "\n");
-
-        //Omit 1 child nodes
-        System.out.print("A.omit(1), A: Node w/ 1 Child\n");
-        A.omit(1);
-        A.prettyprint();
-        System.out.print("A.belongs(1): " + A.belongs(1) + "\n");
-        
-        System.out.print("A.omit(15), A: Node w/ 1 Child\n");
-        A.omit(15);
         A.prettyprint();
 
-        //Omit a leaf
-        System.out.print("A.omit(2000), A: Leaf Node \n");
-        A.omit(2000);
+        A.omit(43);
         A.prettyprint();
+//        A.omit(43);
+//        
+//        A.prettyprint();
+//        
+        A.omit(100);
 
-        System.out.print("A.get_howmany(): " + A.get_howmany() + "\n");
-
-        System.out.print("\nTesting Copy - B was a deep copy, unchanged\n");
-        System.out.print("B: \n");
-        B.prettyprint();
-
-        System.out.print("\nTesting Equals :\n");
-        System.out.print("A.equals(B) = " + A.equals(B) + "\n");
-        System.out.print("B.copy(A) \n");
-        B.copy(A);
-        System.out.print("A.equals(B) = " + A.equals(B) + "\n");
-
+        A.prettyprint();
+//        System.out.print("Testing Insert: \n");
+//        A.insert(10);
+//        A.insert(1);
+//        A.insert(16);
+//        A.insert(20);
+//        A.insert(2000);
+//        A.insert(15);
+//        A.insert(13);
+//        A.insert(14);
+//        System.out.print("A: \n");
+//        A.prettyprint();
+//        A.print();
+//        System.out.print("\nA.get_howmany(): " + A.get_howmany() + "\n");
+//        System.out.print("A.belongs(8): " + A.belongs(8) + "\n");
+//        System.out.print("A.belongs(10): " + A.belongs(10) + "\n");
+//
+//        Intcoll6 B = new Intcoll6();
+//        System.out.print("\nB.copy(A) \n");
+//        B.copy(A);
+//        System.out.print("B: \n");
+//        B.prettyprint();
+//
+//        System.out.print("\nTesting Omit Cases:  \n");
+//        
+//        //Omit a root internal node
+//        System.out.print("A.omit(10), A:  Root Node\n");
+//        A.omit(10);
+//        A.prettyprint();
+//        System.out.print("A.belongs(10): " + A.belongs(10) + "\n");
+//
+//        //Omit 1 child nodes
+//        System.out.print("A.omit(1), A: Node w/ 1 Child\n");
+//        A.omit(1);
+//        A.prettyprint();
+//        System.out.print("A.belongs(1): " + A.belongs(1) + "\n");
+//        
+//        System.out.print("A.omit(15), A: Node w/ 1 Child\n");
+//        A.omit(15);
+//        A.prettyprint();
+//
+//        //Omit a leaf
+//        System.out.print("A.omit(2000), A: Leaf Node \n");
+//        A.omit(2000);
+//        A.prettyprint();
+//
+//        System.out.print("A.get_howmany(): " + A.get_howmany() + "\n");
+//
+//        System.out.print("\nTesting Copy - B was a deep copy, unchanged\n");
+//        System.out.print("B: \n");
+//        B.prettyprint();
+//
+//        System.out.print("\nTesting Equals :\n");
+//        System.out.print("A.equals(B) = " + A.equals(B) + "\n");
+//        System.out.print("B.copy(A) \n");
+//        B.copy(A);
+//        System.out.print("A.equals(B) = " + A.equals(B) + "\n");
     }
 }

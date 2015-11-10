@@ -7,7 +7,13 @@
 package classnotes.heaps;
 
 /**
- *
+ * <Trees>
+ * 
+ * We have been talking about specific types of trees, but in general a tree
+ * is a graph where all nodes have only one path to a node w/ no parent, the root.
+ * 
+ * 
+ * 
  * @author wpower
  */
 class Tree {

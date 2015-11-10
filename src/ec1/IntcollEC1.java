@@ -353,9 +353,8 @@ public class IntcollEC1 {
         if (t == null) {
             return null;    //Base Case
         } else {
-            if (t.info <= n) {  //If info is less than n, we include this node.
-                t.left = remove_recursive(t.left, n);    //Recursive calls to
-                t.right = remove_recursive(t.right, n);    //build child trees
+            if (t.info <= n) { 
+                t.right = remove_recursive(t.right, n); 
                 return t;
             } else {
                 return remove_recursive(t.left, n);
@@ -389,22 +388,23 @@ public class IntcollEC1 {
         IntcollEC1 A = new IntcollEC1();
 
         System.out.print("Testing Insert: \n");
-        A.insert(10);
-        A.insert(1);
-        A.insert(16);
-        A.insert(22);
         A.insert(20);
-        A.insert(2000);
-        A.insert(15);
-        A.insert(13);
-        A.insert(14);
-        A.insert(100);
+        A.insert(10);
+        A.insert(50);
+        A.insert(5);
+        A.insert(8);
+        A.insert(40);
+        A.insert(60);
+        A.insert(35);
+        A.insert(45);
+        A.insert(30);
+        A.insert(38);
 
         System.out.print("A: \n");
         A.prettyprint();
 
-        A.remove(18);
-        System.out.print("A.remove(18): \n");
+        A.remove(30);
+        System.out.print("A.remove(30): \n");
         A.prettyprint();
         
     }
